@@ -7,15 +7,41 @@
     <title>XML http request</title>
     <script>
       async function getUsers() {
-        let response = await fetch(
-          "https://jsonplaceholder.typicode.com/users"
-        );
-        let data = await response.json();
-        return data;
+        try {
+          let response = await fetch(
+            "https://jsonplaceholder.typicode.com/usersde"
+          );
+          if (!response.ok) {
+            throw new Error(`Failed to fetch the data: ${response.status}`);
+          }
+
+          let data = await response.json();
+          return data;
+        } catch (error) {
+          console.log(error);
+        }
       }
-      getUsers().then(data => console.log(data));
+
+      const displayResult = function () {
+        getUsers()
+          .then((data) => {
+            for (const i of data) {
+              const wrapper = document.querySelector(".wrapper");
+              const el = document.createElement("h3");
+              wrapper.appendChild(el);
+              el.innerHTML = i.address.city;
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      };
+
+      displayResult();
     </script>
   </head>
 
-  <body></body>
+  <body>
+    <div class="wrapper"></div>
+  </body>
 </html>
